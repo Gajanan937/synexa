@@ -1,0 +1,21 @@
+{
+    "name": "SYNEXA APP",
+    "short_name": "Synexa",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0B132B",
+    "theme_color": "#1CDBCB",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

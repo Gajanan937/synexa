@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNEXA APP - Local File Dropper</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta name="theme-color" content="#1CDBCB">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-container">
+            <img src="icon.png" alt="SYNEXA Logo" class="app-logo">
+            <h1>SYNEXA APP</h1>
+        </div>
+
+        <div id="role-selection">
+            <button id="sender-btn" class="btn primary">I want to Send</button>
+            <button id="receiver-btn" class="btn secondary">I want to Receive</button>
+        </div>
+
+        <div id="sender-ui" class="hidden panel">
+            <h2>Room Code: <span id="room-code">----</span></h2>
+            <p>Connected Devices (Max 20): <span id="device-count">0</span>/20</p>
+
+            <div id="qrcode" class="qr-box"></div>
+
+            <div id="peers-container" class="hidden">
+                <h3>Select Receivers:</h3>
+                <div id="peer-list"></div>
+
+                <div id="drop-zone" class="hidden">
+                    <p>📂 Click here to select file<br>or Drag & Drop</p>
+                    <input type="file" id="file-input" hidden>
+                </div>
+            </div>
+        </div>
+
+        <div id="receiver-ui" class="hidden panel">
+            <h2>Enter Details</h2>
+            <input type="text" id="rec-name" placeholder="Enter Your Name" class="text-input-wide">
+
+            <input type="text" id="join-code-input" placeholder="Room Code (e.g. 1234)" maxlength="4">
+            <button id="join-btn" class="btn primary">Join Room</button>
+
+            <div class="divider">OR</div>
+            <button id="upload-qr-btn" class="btn secondary">📁 Upload QR Code Image</button>
+            <input type="file" id="qr-file-input" accept="image/*" hidden>
+        </div>
+
+        <div id="status-box" class="hidden">
+            <p id="status-text">Connecting...</p>
+            <div class="progress-bar-container" id="progress-container">
+                <div class="progress-bar" id="progress-bar">0%</div>
+            </div>
+            <p id="speed-info" class="hidden"></p>
+
+            <!-- Leave Room Button -->
+            <button id="leave-btn" class="btn secondary hidden" style="margin-top: 15px;">Leave Room</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
