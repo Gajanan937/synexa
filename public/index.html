@@ -4,66 +4,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNEXA APP - Local File Dropper</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SYNEXA - Modern P2P File Dropper</title>
+
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon.png">
     <meta name="theme-color" content="#1CDBCB">
 </head>
 
-<body>
-    <div class="container">
-        <div class="header-container">
-            <img src="icon.png" alt="SYNEXA Logo" class="app-logo">
-            <h1>SYNEXA APP</h1>
+<body
+    class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 selection:bg-teal-400 selection:text-slate-950">
+
+    <div
+        class="w-full max-w-md mx-auto bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
+
+        <!-- Header Section -->
+        <div class="flex items-center justify-center space-x-3 pb-4 border-b border-slate-800/80">
+            <img src="icon.png" alt="SYNEXA Logo" class="w-10 h-10 object-contain rounded-xl shadow-md">
+            <h1
+                class="text-2xl font-black tracking-wider bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                SYNEXA</h1>
         </div>
 
-        <div id="role-selection">
-            <button id="sender-btn" class="btn primary">I want to Send</button>
-            <button id="receiver-btn" class="btn secondary">I want to Receive</button>
+        <!-- Role Selection -->
+        <div id="role-selection" class="grid grid-cols-2 gap-4">
+            <button id="sender-btn"
+                class="w-full bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-500/20 transition-all duration-200 cursor-pointer active:scale-95 text-sm md:text-base">I
+                want to Send</button>
+            <button id="receiver-btn"
+                class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-3.5 px-4 rounded-2xl border border-slate-700/60 transition-all duration-200 cursor-pointer active:scale-95 text-sm md:text-base">I
+                want to Receive</button>
         </div>
 
-        <div id="sender-ui" class="hidden panel">
-            <h2>Room Code: <span id="room-code">----</span></h2>
-            <p>Connected Devices (Max 20): <span id="device-count">0</span>/20</p>
+        <!-- Sender UI Panel -->
+        <div id="sender-ui" class="hidden space-y-4">
+            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 text-center space-y-2">
+                <h2 class="text-sm font-medium text-slate-400">Room Code</h2>
+                <div id="room-code" class="text-3xl font-mono font-bold tracking-widest text-teal-400">----</div>
+                <p class="text-xs text-slate-500">Connected Devices (Max 20): <span id="device-count"
+                        class="text-slate-300 font-semibold">0</span>/20</p>
+            </div>
 
-            <div id="qrcode" class="qr-box"></div>
+            <div id="qrcode"
+                class="flex justify-center items-center bg-white p-4 rounded-2xl shadow-inner my-4 max-w-[180px] mx-auto border-4 border-slate-800">
+            </div>
 
-            <div id="peers-container" class="hidden">
-                <h3>Select Receivers:</h3>
-                <div id="peer-list"></div>
+            <div id="peers-container" class="hidden space-y-3">
+                <h3 class="text-sm font-semibold text-slate-300">Select Receivers:</h3>
+                <div id="peer-list" class="space-y-2"></div>
 
-                <div id="drop-zone" class="hidden">
-                    <p>📂 Click here to select file<br>or Drag & Drop</p>
+                <div id="drop-zone"
+                    class="hidden border-2 border-dashed border-slate-700 hover:border-teal-400 rounded-2xl p-6 text-center cursor-pointer transition-all bg-slate-950/40 hover:bg-slate-950/80 group">
+                    <p class="text-slate-300 text-sm group-hover:text-teal-300 transition-colors">📂 Click here to
+                        select file<br><span class="text-xs text-slate-500">or Drag & Drop</span></p>
                     <input type="file" id="file-input" hidden>
+                </div>
+
+                <!-- File Preview Container -->
+                <div id="file-preview-container"
+                    class="hidden mt-3 p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center space-x-3">
+                    <div id="file-thumbnail"
+                        class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center overflow-hidden text-teal-400 font-bold text-xs shrink-0 border border-slate-800">
+                        FILE</div>
+                    <div class="flex-1 min-w-0 text-left">
+                        <p id="preview-filename" class="text-xs font-semibold text-slate-200 truncate">filename.ext</p>
+                        <p id="preview-filesize" class="text-[10px] text-slate-500">0 MB</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="receiver-ui" class="hidden panel">
-            <h2>Enter Details</h2>
-            <input type="text" id="rec-name" placeholder="Enter Your Name" class="text-input-wide">
+        <!-- Receiver UI Panel -->
+        <div id="receiver-ui" class="hidden space-y-4">
+            <h2 class="text-base font-semibold text-slate-300 text-center">Join Room</h2>
+            <input type="text" id="rec-name" placeholder="Enter Your Name"
+                class="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-600 rounded-xl px-4 py-3.5 focus:outline-none focus:border-teal-400 transition-all text-sm">
 
-            <input type="text" id="join-code-input" placeholder="Room Code (e.g. 1234)" maxlength="4">
-            <button id="join-btn" class="btn primary">Join Room</button>
+            <input type="text" id="join-code-input" placeholder="Room Code (e.g. 4199)" maxlength="4"
+                class="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-600 rounded-xl px-4 py-3.5 focus:outline-none focus:border-teal-400 transition-all text-center tracking-widest text-xl font-mono">
+            <button id="join-btn"
+                class="w-full bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-500/20 transition-all duration-200 cursor-pointer active:scale-95">Join
+                Room</button>
 
-            <div class="divider">OR</div>
-            <button id="upload-qr-btn" class="btn secondary">📁 Upload QR Code Image</button>
+            <div
+                class="flex items-center my-4 text-slate-600 text-xs tracking-wider uppercase before:flex-1 before:border-t before:border-slate-800 before:mr-3 after:flex-1 after:border-t after:border-slate-800 after:ml-3">
+                OR</div>
+
+            <button id="upload-qr-btn"
+                class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-3 px-4 rounded-xl border border-slate-700/60 transition-all duration-200 cursor-pointer text-sm">📁
+                Upload QR Code Image</button>
             <input type="file" id="qr-file-input" accept="image/*" hidden>
         </div>
 
-        <div id="status-box" class="hidden">
-            <p id="status-text">Connecting...</p>
-            <div class="progress-bar-container" id="progress-container">
-                <div class="progress-bar" id="progress-bar">0%</div>
+        <!-- Status & Progress Box -->
+        <div id="status-box" class="hidden space-y-3 bg-slate-950/50 p-4 rounded-2xl border border-slate-800">
+            <p id="status-text" class="text-sm font-medium text-teal-400 text-center animate-pulse">Connecting...</p>
+
+            <div class="w-full bg-slate-950 rounded-full h-3.5 overflow-hidden border border-slate-800"
+                id="progress-container">
+                <div class="bg-gradient-to-r from-teal-500 to-cyan-400 h-full text-[10px] font-bold text-slate-950 flex items-center justify-center transition-all duration-300 rounded-full"
+                    id="progress-bar" style="width: 0%;">0%</div>
             </div>
-            <p id="speed-info" class="hidden"></p>
+
+            <p id="speed-info" class="hidden text-xs text-slate-400 text-center font-mono"></p>
 
             <!-- Leave Room Button -->
-            <button id="leave-btn" class="btn secondary hidden" style="margin-top: 15px;">Leave Room</button>
+            <button id="leave-btn"
+                class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-medium py-2.5 px-4 rounded-xl transition-all duration-200 cursor-pointer text-sm hidden">Leave
+                Room</button>
+        </div>
+
+        <!-- Transfer History Panel (Room mein active files ki list) -->
+        <div id="history-panel" class="hidden space-y-2 mt-4 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider text-left">📁 Room Transfer History
+            </h3>
+            <div id="history-list" class="space-y-2 max-h-40 overflow-y-auto text-left"></div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
